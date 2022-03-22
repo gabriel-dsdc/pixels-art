@@ -6,7 +6,6 @@ function setPaletteColors() {
   paletteKeys.forEach((key) => {
     if (paletteKeys[key] !== '0') {
       paletteSelector[key].style.backgroundColor = colors[key - 1];
-      console.log(key);
     }
   });
 }
