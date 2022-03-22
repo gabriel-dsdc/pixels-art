@@ -1,5 +1,6 @@
 const colors = ['red', 'blue', 'green'];
-const paletteSelector = document.getElementsByClassName('color');
+const colorPalette = document.getElementById('color-palette');
+const paletteSelector = colorPalette.getElementsByClassName('color');
 const boardSelector = document.getElementById('pixel-board');
 
 function setPaletteColors() {
@@ -30,3 +31,17 @@ function generatePixelBoard() {
   }
 }
 generatePixelBoard();
+
+function colorSelector(event) {
+  for (let index = 0; index < paletteSelector.length; index += 1) {
+    if (paletteSelector[index].classList.contains('selected')) {
+      paletteSelector[index].classList.remove('selected');
+    }
+  }
+  event.target.classList.add('selected');
+}
+document.addEventListener('click', (event) => {
+  if (event.target.classList.contains('color')) {
+    colorSelector(event);
+  }
+}, false);
