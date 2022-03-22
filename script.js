@@ -40,8 +40,24 @@ function colorSelector(event) {
   }
   event.target.classList.add('selected');
 }
+
+function activeColor() {
+  let currentColor = 'black';
+  for (let index = 0; index < paletteSelector.length; index += 1) {
+    if (paletteSelector[index].classList.contains('selected')) {
+      const cssObj = window.getComputedStyle(paletteSelector[index], null);
+      currentColor = cssObj.getPropertyValue('background-color');
+    }
+  }
+  return currentColor;
+}
+
 document.addEventListener('click', (event) => {
-  if (event.target.classList.contains('color')) {
+  const clicked = event.target;
+  if (clicked.classList.contains('color')) {
     colorSelector(event);
+  }
+  if (clicked.classList.contains('pixel')) {
+    clicked.style.backgroundColor = activeColor();
   }
 }, false);
