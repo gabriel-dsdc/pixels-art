@@ -2,6 +2,7 @@ const colors = ['red', 'blue', 'green'];
 const colorPalette = document.getElementById('color-palette');
 const paletteSelector = colorPalette.getElementsByClassName('color');
 const boardSelector = document.getElementById('pixel-board');
+const boardPixels = document.getElementsByClassName('pixel');
 
 function setPaletteColors() {
   const paletteKeys = Object.keys(paletteSelector);
@@ -52,6 +53,12 @@ function activeColor() {
   return currentColor;
 }
 
+function boardClear() {
+  Object.keys(boardPixels).forEach((key) => {
+    boardPixels[key].style.backgroundColor = null;
+  });
+}
+
 document.addEventListener('click', (event) => {
   const clicked = event.target;
   if (clicked.classList.contains('color')) {
@@ -59,5 +66,8 @@ document.addEventListener('click', (event) => {
   }
   if (clicked.classList.contains('pixel')) {
     clicked.style.backgroundColor = activeColor();
+  }
+  if (clicked.id === 'clear-board') {
+    boardClear();
   }
 }, false);
