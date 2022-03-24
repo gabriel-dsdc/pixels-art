@@ -1,18 +1,27 @@
-const colors = ['red', 'blue', 'green'];
+const colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'magenta'];
 const colorPalette = document.getElementById('color-palette');
 const paletteSelector = colorPalette.getElementsByClassName('color');
 const boardSelector = document.getElementById('pixel-board');
 const boardPixels = document.getElementsByClassName('pixel');
 
-function setPaletteColors() {
-  const paletteKeys = Object.keys(paletteSelector);
-  paletteKeys.forEach((key) => {
-    if (paletteKeys[key] !== '0') {
+/* function setPaletteColors() {
+  Object.keys(paletteSelector).forEach((key) => {
+    if (paletteSelector[key] !== '0') {
       paletteSelector[key].style.backgroundColor = colors[key - 1];
     }
   });
 }
-setPaletteColors();
+setPaletteColors(); */
+
+function setRandomColors() {
+  const randomColors = colors.sort(() => Math.random() - 0.5);
+  Object.keys(paletteSelector).forEach((key) => {
+    if (paletteSelector[key] !== '0') {
+      paletteSelector[key].style.backgroundColor = randomColors[key - 1];
+    }
+  });
+}
+setRandomColors();
 
 function createPixel(pixelClass) {
   const pixel = document.createElement('div');
@@ -22,7 +31,11 @@ function createPixel(pixelClass) {
   return pixel;
 }
 
-function generatePixelBoard(boardSize) {
+function generatePixelBoard(size) {
+  let boardSize = size;
+  if (size === undefined) {
+    boardSize = 5;
+  }
   for (let count = 0; count < boardSize; count += 1) {
     boardSelector.appendChild(createPixel());
     for (let count2 = 0; count2 < boardSize; count2 += 1) {
@@ -31,17 +44,18 @@ function generatePixelBoard(boardSize) {
     }
   }
 }
+generatePixelBoard();
+
 function createPixelBoard(boardInput) {
-  let boardSize = boardInput;
+  let size = boardInput;
   if (boardInput === undefined || boardInput < 5) {
-    boardSize = '5';
+    size = '5';
   }
   if (boardInput > 50) {
-    boardSize = '50';
+    size = '50';
   }
-  generatePixelBoard(boardSize);
+  generatePixelBoard(size);
 }
-generatePixelBoard();
 
 function colorSelector(clicked) {
   for (let index = 0; index < paletteSelector.length; index += 1) {
