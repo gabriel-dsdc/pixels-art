@@ -22,24 +22,34 @@ function createPixel(pixelClass) {
   return pixel;
 }
 
-function generatePixelBoard() {
-  for (let count = 0; count < 5; count += 1) {
+function generatePixelBoard(boardSize) {
+  for (let count = 0; count < boardSize; count += 1) {
     boardSelector.appendChild(createPixel());
-    for (let count2 = 0; count2 < 5; count2 += 1) {
+    for (let count2 = 0; count2 < boardSize; count2 += 1) {
       const mainDiv = document.querySelectorAll('#pixel-board > div')[count];
       mainDiv.appendChild(createPixel('pixel'));
     }
   }
 }
+function createPixelBoard(boardInput) {
+  let boardSize = boardInput;
+  if (boardInput === undefined || boardInput < 5) {
+    boardSize = '5';
+  }
+  if (boardInput > 50) {
+    boardSize = '50';
+  }
+  generatePixelBoard(boardSize);
+}
 generatePixelBoard();
 
-function colorSelector(event) {
+function colorSelector(clicked) {
   for (let index = 0; index < paletteSelector.length; index += 1) {
     if (paletteSelector[index].classList.contains('selected')) {
       paletteSelector[index].classList.remove('selected');
     }
   }
-  event.target.classList.add('selected');
+  clicked.classList.add('selected');
 }
 
 function activeColor() {
@@ -59,15 +69,28 @@ function boardClear() {
   });
 }
 
+function otherFeatures(clicked) {
+  if (clicked.id === 'clear-board') {
+    boardClear();
+  }
+
+  if (clicked.id === 'generate-board') {
+    boardSelector.innerHTML = null;
+    const boardInput = document.getElementById('board-size').value;
+    if (boardInput === '') {
+      return alert('Board inválido!');
+    }
+    createPixelBoard(boardInput);
+  }
+}
+
 document.addEventListener('click', (event) => {
   const clicked = event.target;
   if (clicked.classList.contains('color')) {
-    colorSelector(event);
+    colorSelector(clicked);
   }
   if (clicked.classList.contains('pixel')) {
     clicked.style.backgroundColor = activeColor();
   }
-  if (clicked.id === 'clear-board') {
-    boardClear();
-  }
+  otherFeatures(clicked);
 }, false);
