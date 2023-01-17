@@ -1,32 +1,39 @@
-const colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'magenta'];
+const colors = ['white', 'red', 'green', 'blue', 'yellow', 'orange', 'purple', 'brown', 'magenta'];
 const colorPalette = document.getElementById('color-palette');
 const paletteSelector = colorPalette.getElementsByClassName('color');
 const boardSelector = document.getElementById('pixel-board');
 const boardPixels = document.getElementsByClassName('pixel');
+let isPointerDown = false;
+document.ondragstart = () => false;
 
-/* function setPaletteColors() {
+function setPaletteColors() {
+  for (let i = 0; i < 9; i += 1) {
+    const color = document.createElement('div');
+    color.classList.add('color');
+    colorPalette.appendChild(color);
+  }
   Object.keys(paletteSelector).forEach((key) => {
     if (paletteSelector[key] !== '0') {
       paletteSelector[key].style.backgroundColor = colors[key - 1];
     }
   });
+  const colorInput = document.createElement('input');
+  colorInput.id = 'custom-color-input';
+  colorInput.type = 'color';
+  colorInput.title = 'Escolher cor personalizada';
+  colorPalette.appendChild(colorInput);
 }
-setPaletteColors(); */
-
-function setRandomColors() {
-  const randomColors = colors.sort(() => Math.random() - 0.5);
-  Object.keys(paletteSelector).forEach((key) => {
-    if (paletteSelector[key] !== '0') {
-      paletteSelector[key].style.backgroundColor = randomColors[key - 1];
-    }
-  });
-}
-setRandomColors();
+setPaletteColors();
 
 function createPixel(pixelClass) {
   const pixel = document.createElement('div');
-  if (pixelClass !== undefined) {
-    pixel.classList = pixelClass;
+  if (pixelClass) {
+    pixel.classList.add(pixelClass);
+    pixel.addEventListener('pointerenter', ({ target }) => {
+      if (isPointerDown === true) {
+        target.style.backgroundColor = activeColor();
+      }
+    });
   }
   return pixel;
 }
@@ -46,9 +53,14 @@ function generatePixelBoard(size) {
 }
 generatePixelBoard();
 
-function createPixelBoard(boardInput) {
+function createPixelBoard() {
+  boardSelector.innerHTML = null;
+  const boardInput = document.getElementById('board-size').value;
+  if (!boardInput) {
+    alert('Board inválido!');
+  }
   let size = boardInput;
-  if (boardInput === undefined || boardInput < 5) {
+  if (!boardInput || boardInput < 5) {
     size = '5';
   }
   if (boardInput > 50) {
@@ -57,23 +69,19 @@ function createPixelBoard(boardInput) {
   generatePixelBoard(size);
 }
 
-function colorSelector(clicked) {
-  for (let index = 0; index < paletteSelector.length; index += 1) {
-    if (paletteSelector[index].classList.contains('selected')) {
-      paletteSelector[index].classList.remove('selected');
-    }
-  }
-  clicked.classList.add('selected');
+function colorSelector(target) {
+  const selected = document.getElementsByClassName('selected')[0];
+  selected.classList.remove('selected');
+  target.classList.add('selected');
 }
 
 function activeColor() {
-  let currentColor = 'black';
-  for (let index = 0; index < paletteSelector.length; index += 1) {
-    if (paletteSelector[index].classList.contains('selected')) {
-      const cssObj = window.getComputedStyle(paletteSelector[index], null);
-      currentColor = cssObj.getPropertyValue('background-color');
-    }
+  const selected = document.getElementsByClassName('selected')[0];
+  if (selected.type) {
+    return selected.value;
   }
+  const cssObj = window.getComputedStyle(selected);
+  const currentColor = cssObj.getPropertyValue('background-color');
   return currentColor;
 }
 
@@ -83,28 +91,28 @@ function boardClear() {
   });
 }
 
-function otherFeatures(clicked) {
-  if (clicked.id === 'clear-board') {
+['pointerdown', 'pointerup'].forEach((type) => {
+  document.addEventListener(type, ({ target }) => {
+    isPointerDown = !isPointerDown;
+    if (isPointerDown && target.classList.contains('pixel')) {
+      target.style.backgroundColor = activeColor();
+    }
+  });
+});
+
+document.addEventListener('pointerdown', ({ target }) => {
+  if (target.classList.contains('color')) {
+    colorSelector(target);
+  }
+  if (target.id === 'clear-board') {
     boardClear();
   }
+  if (target.id === 'generate-board') {
+    createPixelBoard();
+  }
+});
 
-  if (clicked.id === 'generate-board') {
-    boardSelector.innerHTML = null;
-    const boardInput = document.getElementById('board-size').value;
-    if (boardInput === '') {
-      return alert('Board inválido!');
-    }
-    createPixelBoard(boardInput);
-  }
-}
-
-document.addEventListener('click', (event) => {
-  const clicked = event.target;
-  if (clicked.classList.contains('color')) {
-    colorSelector(clicked);
-  }
-  if (clicked.classList.contains('pixel')) {
-    clicked.style.backgroundColor = activeColor();
-  }
-  otherFeatures(clicked);
-}, false);
+const customColorInput = document.querySelector('input[type=color]');
+customColorInput.addEventListener('change', ({ target }) => {
+  colorSelector(target);
+});
