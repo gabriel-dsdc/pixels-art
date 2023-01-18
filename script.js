@@ -29,9 +29,10 @@ function createPixel(pixelClass) {
   const pixel = document.createElement('div');
   if (pixelClass) {
     pixel.classList.add(pixelClass);
-    pixel.addEventListener('pointerenter', ({ target }) => {
-      if (isPointerDown === true) {
-        target.style.backgroundColor = activeColor();
+    pixel.addEventListener('pointermove', (e) => {
+      const eFromPoint = document.elementFromPoint(e.pageX, e.pageY);
+      if (isPointerDown && eFromPoint && eFromPoint.classList.contains('pixel')) {
+        eFromPoint.style.backgroundColor = activeColor();
       }
     });
   }
@@ -93,16 +94,17 @@ function boardClear() {
   });
 }
 
+const customColorInput = document.getElementById('custom-color-input');
 document.addEventListener('pointerup', () => isPointerDown = false);
-document.addEventListener('pointerdown', () => isPointerDown = true);
 document.addEventListener('pointerdown', ({ target }) => {
+  isPointerDown = true;
+  if (target.classList.contains('color')) {
+    colorSelector(target);
+  }
   if (isPointerDown && target.classList.contains('pixel')) {
     target.style.backgroundColor = activeColor();
   }
-});
-
-document.addEventListener('pointerdown', ({ target }) => {
-  if (target.classList.contains('color')) {
+  if (target.id === 'custom-color-input') {
     colorSelector(target);
   }
   if (target.id === 'clear-board') {
@@ -113,7 +115,6 @@ document.addEventListener('pointerdown', ({ target }) => {
   }
 });
 
-const customColorInput = document.querySelector('input[type=color]');
 customColorInput.addEventListener('change', ({ target }) => {
   colorSelector(target);
 });
