@@ -38,14 +38,10 @@ function createPixel(pixelClass) {
   return pixel;
 }
 
-function generatePixelBoard(size) {
-  let boardSize = size;
-  if (size === undefined) {
-    boardSize = 5;
-  }
-  for (let count = 0; count < boardSize; count += 1) {
+function generatePixelBoard(width = 5, height = 5) {
+  for (let count = 0; count < height; count += 1) {
     boardSelector.appendChild(createPixel());
-    for (let count2 = 0; count2 < boardSize; count2 += 1) {
+    for (let count2 = 0; count2 < width; count2 += 1) {
       const mainDiv = document.querySelectorAll('#pixel-board > div')[count];
       mainDiv.appendChild(createPixel('pixel'));
     }
@@ -55,18 +51,24 @@ generatePixelBoard();
 
 function createPixelBoard() {
   boardSelector.innerHTML = null;
-  const boardInput = document.getElementById('board-size').value;
-  if (!boardInput) {
+  let boardWidth = document.getElementById('board-width').value;
+  let boardHeight = document.getElementById('board-height').value;
+  if (!boardWidth || !boardHeight) {
     alert('Board inválido!');
   }
-  let size = boardInput;
-  if (!boardInput || boardInput < 5) {
-    size = '5';
+  if (!boardWidth || boardWidth < 5) {
+    boardWidth = '5';
   }
-  if (boardInput > 50) {
-    size = '50';
+  if (!boardHeight || boardHeight < 5) {
+    boardHeight = '5';
   }
-  generatePixelBoard(size);
+  if (boardWidth > 50) {
+    boardWidth = '50';
+  }
+  if (boardHeight > 50) {
+    boardHeight = '50';
+  }
+  generatePixelBoard(Number(boardWidth), Number(boardHeight));
 }
 
 function colorSelector(target) {
@@ -91,13 +93,12 @@ function boardClear() {
   });
 }
 
-['pointerdown', 'pointerup'].forEach((type) => {
-  document.addEventListener(type, ({ target }) => {
-    isPointerDown = !isPointerDown;
-    if (isPointerDown && target.classList.contains('pixel')) {
-      target.style.backgroundColor = activeColor();
-    }
-  });
+document.addEventListener('pointerup', () => isPointerDown = false);
+document.addEventListener('pointerdown', () => isPointerDown = true);
+document.addEventListener('pointerdown', ({ target }) => {
+  if (isPointerDown && target.classList.contains('pixel')) {
+    target.style.backgroundColor = activeColor();
+  }
 });
 
 document.addEventListener('pointerdown', ({ target }) => {
