@@ -30,7 +30,7 @@ function createPixel(pixelClass) {
   if (pixelClass) {
     pixel.classList.add(pixelClass);
     pixel.addEventListener('pointermove', (e) => {
-      const eFromPoint = document.elementFromPoint(e.pageX, e.pageY);
+      const eFromPoint = document.elementFromPoint(e.clientX, e.clientY);
       if (isPointerDown && eFromPoint && eFromPoint.classList.contains('pixel')) {
         eFromPoint.style.backgroundColor = activeColor();
       }
