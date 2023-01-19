@@ -24,6 +24,7 @@ section > div {
 #color-palette {
   display: flex;
   align-items: flex-end;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
