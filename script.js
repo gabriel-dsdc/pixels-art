@@ -50,7 +50,8 @@ function generatePixelBoard(width = 5, height = 5) {
 }
 generatePixelBoard();
 
-function createPixelBoard() {
+function createPixelBoard(event) {
+  event.preventDefault();
   boardSelector.innerHTML = null;
   let boardWidth = document.getElementById('board-width').value;
   let boardHeight = document.getElementById('board-height').value;
@@ -109,9 +110,6 @@ document.addEventListener('pointerdown', ({ target }) => {
   }
   if (target.id === 'clear-board') {
     boardClear();
-  }
-  if (target.id === 'generate-board') {
-    createPixelBoard();
   }
 });
 

@@ -8,33 +8,38 @@
     <title>Pixel Art</title>
   </head>
   <body>
-    <header></header>
+    <header>
+      <h1 id="title">Paleta de Cores</h1>
+    </header>
     <main>
       <section>
-        <h1 id="title">Paleta de Cores</h1>
-        <div id="color-palette">
-          <div class="color selected"></div>
+        <div>
+          <div id="color-palette">
+            <div class="color selected"></div>
+          </div>
+          <form onsubmit="createPixelBoard(event)">
+            <label for="board-size"
+              >Tamanho do painel
+              <input
+                type="number"
+                id="board-width"
+                placeholder="Largura"
+                min="1"
+                max="50"
+              />
+              <input
+                type="number"
+                id="board-height"
+                placeholder="Altura"
+                min="1"
+                max="50"
+              />
+              <button type="submit" id="generate-board">Definir</button></label
+            >
+            <br /><br />
+            <button type="button" id="clear-board">Limpar Painel</button>
+          </form>
         </div>
-        <label for="board-size"
-          >Tamanho do painel
-          <input
-            type="number"
-            id="board-width"
-            placeholder="Largura"
-            min="1"
-            max="50"
-          />
-          <input
-            type="number"
-            id="board-height"
-            placeholder="Altura"
-            min="1"
-            max="50"
-          />
-          <button type="button" id="generate-board">VQV</button></label
-        >
-        <br /><br />
-        <button type="button" id="clear-board">Limpar Painel</button>
         <br /><br />
         <div id="pixel-board"></div>
       </section>

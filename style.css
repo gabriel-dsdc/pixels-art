@@ -1,3 +1,26 @@
+* {
+  font-weight: 700;
+}
+
+header {
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+}
+
+section > div {
+  align-self: center;
+  text-align: center;
+}
+
 #color-palette {
   display: flex;
   align-items: flex-end;
@@ -17,6 +40,37 @@
 }
 
 .color:hover {
+  cursor: pointer;
+}
+
+#board-width , #board-height {
+  border-radius: 5px;
+  border: 3px solid gray;
+  width: 5em;
+  padding: auto 30px;
+}
+
+#board-width:focus , #board-height:focus {
+  border-radius: 5px;
+  border: 3px solid rgb(0, 123, 255);
+  outline: none;
+}
+
+::-webkit-inner-spin-button {
+  height: 25px;
+}
+
+button {
+  border-radius: 5px;
+  background-color: rgb(0, 123, 255);
+  color: white;
+  padding: 5px 10px;
+}
+
+button:hover {
+  background-color: white;
+  border: 1px solid rgb(0, 123, 255);
+  color: rgb(0, 123, 255);
   cursor: pointer;
 }
 
